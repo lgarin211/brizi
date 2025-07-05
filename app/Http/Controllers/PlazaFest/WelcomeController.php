@@ -28,7 +28,7 @@ class WelcomeController extends Controller
         foreach ($datacomponent3 as $event) {
             $event->image = url('/lgarin211/' . $event->image);
         }
-        $datacomponent4 = DB::table('tenan')
+        $datacomponent4 = DB::table('tenants')
             ->select('id', 'img as image','location', 'created_at', 'updated_at')
             ->get();
 
