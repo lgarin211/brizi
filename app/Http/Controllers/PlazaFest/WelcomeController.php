@@ -40,7 +40,7 @@ class WelcomeController extends Controller
             ->get();
 
         foreach ($datacomponent4 as $tenan) {
-            $tenan->image = url('/storage/' . $tenan->image);
+            $tenan->img = url('/storage/' . $tenan->img);
         }
 
         $datacomponent5 = [
