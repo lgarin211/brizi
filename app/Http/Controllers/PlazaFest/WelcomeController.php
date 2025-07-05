@@ -11,14 +11,14 @@ class WelcomeController extends Controller
     {
         $datacomponent1 = [
             'title' => setting('landing.welcome_text'),
-            'big_banner' =>url('/lgarin211/'.setting('landing.big_banner')),
+            'big_banner' =>url('/storage/'.setting('landing.big_banner')),
             'big_welcome' => setting('landing.big_welcome')
         ];
         $datacomponent2 = DB::table('event')
             ->select('id', 'banner','title', 'description','created_at', 'updated_at')
             ->get();
         foreach ($datacomponent2 as $event) {
-            $event->banner = url('/lgarin211/' . $event->banner);
+            $event->banner = url('/storage/' . $event->banner);
         }
 
 
@@ -26,14 +26,14 @@ class WelcomeController extends Controller
             ->select('id','image','description','created_at','updated_at')
             ->get();
         foreach ($datacomponent3 as $event) {
-            $event->image = url('/lgarin211/' . $event->image);
+            $event->image = url('/storage/' . $event->image);
         }
         $datacomponent4 = DB::table('tenants')
             ->select('id', 'img as image','location', 'created_at', 'updated_at')
             ->get();
 
         foreach ($datacomponent4 as $tenan) {
-            $tenan->image = url('/lgarin211/' . $tenan->image);
+            $tenan->image = url('/storage/' . $tenan->image);
         }
 
         $datacomponent5 = [
