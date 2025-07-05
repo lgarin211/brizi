@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlazaFest\FasilitasController;
 use App\Http\Controllers\PlazaFest\TransaksiController;
+use App\Http\Controllers\PlazaFest\MidtransController;
 use App\Http\Controllers\PlazaFest\ArticleController;
 use App\Http\Controllers\PlazaFest\MenuRestoController;
 use App\Http\Controllers\PlazaFest\SportVenueController;
@@ -38,3 +39,14 @@ Route::get('/listvenue', [SportVenueController::class, 'getListVenue']);
 
 // Detail Booking Routes
 Route::get('/detailbooking', [DetailBookingController::class, 'getListDetailBooking']);
+
+// Midtrans Payment Routes
+Route::get('/payment-methods', [MidtransController::class, 'getPaymentMethods']);
+Route::post('/midtrans/create-payment', [MidtransController::class, 'createPayment']);
+Route::post('/midtrans/notification', [MidtransController::class, 'notification']);
+Route::post('/midtrans/success', [MidtransController::class, 'success']);
+Route::post('/midtrans/failed', [MidtransController::class, 'failed']);
+Route::get('/midtrans/finish', [MidtransController::class, 'finish']);
+Route::get('/midtrans/unfinish', [MidtransController::class, 'unfinish']);
+Route::get('/midtrans/error', [MidtransController::class, 'error']);
+Route::get('/payment-status', [MidtransController::class, 'checkStatus']);
