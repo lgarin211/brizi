@@ -36,7 +36,7 @@ class WelcomeController extends Controller
             $event->image = url('/storage/' . $event->image);
         }
         $datacomponent4 = DB::table('tenants')
-            ->select('id', 'img as image','location', 'created_at', 'updated_at')
+            ->select('id', 'img','location', 'created_at', 'updated_at')
             ->get();
 
         foreach ($datacomponent4 as $tenan) {
