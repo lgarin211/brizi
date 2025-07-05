@@ -5,7 +5,7 @@ namespace App\Models\PlazaFest;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Sport_Facility extends Model
+class Facility_Sport extends Model
 {
     protected $table = 'sport_facility';
 }
