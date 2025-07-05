@@ -816,6 +816,7 @@ class ComposerStaticInit9c491b8531eec05ba41a11d9276a5749
         'App\\Models\\PlazaFest\\ListMenuRestaurant' => __DIR__ . '/../..' . '/app/Models/PlazaFest/ListMenuRestaurant.php',
         'App\\Models\\PlazaFest\\Masterbookingtime' => __DIR__ . '/../..' . '/app/Models/PlazaFest/Masterbookingtime.php',
         'App\\Models\\PlazaFest\\PromoDbooking' => __DIR__ . '/../..' . '/app/Models/PlazaFest/PromoDbooking.php',
+        'App\\Models\\PlazaFest\\SportFacility' => __DIR__ . '/../..' . '/app/Models/PlazaFest/SportFacility.php',
         'App\\Models\\PlazaFest\\SportPromo' => __DIR__ . '/../..' . '/app/Models/PlazaFest/SportPromo.php',
         'App\\Models\\PlazaFest\\SportVenue' => __DIR__ . '/../..' . '/app/Models/PlazaFest/SportVenue.php',
         'App\\Models\\PlazaFest\\SubFacility' => __DIR__ . '/../..' . '/app/Models/PlazaFest/SubFacility.php',

@@ -52,6 +52,7 @@ return array(
     'App\\Models\\PlazaFest\\ListMenuRestaurant' => $baseDir . '/app/Models/PlazaFest/ListMenuRestaurant.php',
     'App\\Models\\PlazaFest\\Masterbookingtime' => $baseDir . '/app/Models/PlazaFest/Masterbookingtime.php',
     'App\\Models\\PlazaFest\\PromoDbooking' => $baseDir . '/app/Models/PlazaFest/PromoDbooking.php',
+    'App\\Models\\PlazaFest\\SportFacility' => $baseDir . '/app/Models/PlazaFest/SportFacility.php',
     'App\\Models\\PlazaFest\\SportPromo' => $baseDir . '/app/Models/PlazaFest/SportPromo.php',
     'App\\Models\\PlazaFest\\SportVenue' => $baseDir . '/app/Models/PlazaFest/SportVenue.php',
     'App\\Models\\PlazaFest\\SubFacility' => $baseDir . '/app/Models/PlazaFest/SubFacility.php',

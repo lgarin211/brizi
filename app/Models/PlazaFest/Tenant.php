@@ -4,8 +4,9 @@ namespace App\Models\PlazaFest;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SportFacility extends Model
+class Tenant extends Model
 {
-    protected $table = 'sport_facility';
+
+    protected $table ='tenant';
 
 }
