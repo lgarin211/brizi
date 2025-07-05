@@ -9,9 +9,16 @@ class WelcomeController extends Controller
 {
     public function index()
     {
+        $datacomponent0 = DB::table('sliders')->get();
+        $allbanners=[];
+        foreach ($datacomponent0 as $slide) {
+            $slide->banner = url('/storage/' . $slide->banner);
+            $allbanners[] = $slide->banner;
+        }
+
         $datacomponent1 = [
             'title' => setting('landing.welcome_text'),
-            'big_banner' =>url('/storage/'.setting('landing.big_banner')),
+            'big_banner' => $allbanners,
             'big_welcome' => setting('landing.big_welcome')
         ];
         $datacomponent2 = DB::table('event')
@@ -41,6 +48,7 @@ class WelcomeController extends Controller
             'ig' => setting('landing.ig')
         ];
         $response = [
+            'component0' => $datacomponent0,
             'component1' => $datacomponent1,
             'component2' => $datacomponent2,
             'component3' => $datacomponent3,
