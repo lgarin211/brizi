@@ -10,7 +10,7 @@ class MenuRestoController extends Controller
 {
     public function getListMenu(Request $request,$id)
     {
-        $datacomponent1 =DB::table('tenan')
+        $datacomponent1 =DB::table('tenants')
                         ->where('id', $id)
                         ->first();
         $datacomponent1->img = asset('storage/' . $datacomponent1->img);
