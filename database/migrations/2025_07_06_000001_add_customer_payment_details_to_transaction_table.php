@@ -12,11 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('transaction', function (Blueprint $table) {
-            $table->string('order_id')->nullable()->after('id')->index();
-            $table->string('payment_type')->nullable()->after('price');
-            $table->text('snap_token')->nullable()->after('payment_type');
-            $table->text('snap_redirect_url')->nullable()->after('snap_token');
-            $table->text('midtrans_response')->nullable()->after('transactionpoin');
+            // Add customer details column
+            $table->json('customer_details')->nullable()->after('midtrans_response');
+
+            // Add payment method specific details column
+            $table->json('payment_details')->nullable()->after('customer_details');
+
+            // Add index for better performance on payment_type queries
+            $table->index('payment_type');
         });
     }
 
@@ -26,7 +29,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('transaction', function (Blueprint $table) {
-            $table->dropColumn(['order_id', 'payment_type', 'snap_token', 'snap_redirect_url', 'midtrans_response']);
+            $table->dropIndex(['payment_type']);
+            $table->dropColumn(['customer_details', 'payment_details']);
         });
     }
 };
