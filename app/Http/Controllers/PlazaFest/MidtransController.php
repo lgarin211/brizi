@@ -108,7 +108,6 @@ class MidtransController extends Controller
             'customer_details.email' => 'required|email',
             'customer_details.phone' => 'required|string',
         ]);
-
         try {
             // Get transaction details
             $transaction = DB::table('transaction')->where('id', $validated['transaction_id'])->first();
@@ -177,7 +176,7 @@ class MidtransController extends Controller
                 ],
                 'enabled_payments' => $this->getEnabledPayments($validated['payment_type']),
                 'callbacks' => [
-                    'finish' => url('/api/midtrans/finish'),
+                    'finish' => url('/api/midtrans/finish?nbis='. $request->input('cathcallback')),
                     'unfinish' => url('/api/midtrans/unfinish'),
                     'error' => url('/api/midtrans/error')
                 ],
@@ -444,6 +443,7 @@ class MidtransController extends Controller
     {
         // Try to get order_id from different sources including raw body
         $orderId = $this->extractOrderId($request);
+        // dd($request->all());
 
         Log::info('Midtrans Finish Callback', [
             'all_request_data' => $request->all(),
@@ -471,13 +471,31 @@ class MidtransController extends Controller
 
         $transaction = DB::table('transaction')->where('order_id', $orderId)->first();
 
-        return response()->json([
-            'message' => 'Payment process completed',
-            'order_id' => $orderId,
-            'status' => $transaction ? $transaction->status : 'unknown',
-            'redirect_url' => url('/booking-status?order_id=' . $orderId),
-            'transaction_found' => $transaction ? true : false
-        ]);
+        // return response()->json([
+        //     'message' => 'Payment process completed',
+        //     'order_id' => $orderId,
+        //     'status' => $transaction ? $transaction->status : 'unknown',
+        //     'redirect_url' => url('/booking-status?order_id=' . $orderId),
+        //     'transaction_found' => $transaction ? true : false
+        // ]);
+
+        // return redirect()->to(url('api/payment-status?order_id=' . $orderId))
+        //     ->with('message', 'Payment process completed')
+        //     ->with('order_id', $orderId)
+        //     ->with('status', $transaction ? $transaction->status : 'unknown')
+        //     ->with('transaction_found', $transaction ? true : false);
+
+        // return redirect()->to(url('/booking-success?order_id=' . $orderId))
+        //     ->with('message', 'Payment process completed')
+        //     ->with('order_id', $orderId)
+        //     ->with('status', $transaction ? $transaction->status : 'unknown')
+        //     ->with('transaction_found', $transaction ? true : false);
+
+        return redirect()->to($request->input('nbis'))
+            ->with('message', 'Payment process completed')
+            ->with('order_id', $orderId)
+            ->with('status', $transaction ? $transaction->status : 'unknown')
+            ->with('transaction_found', $transaction ? true : false);
     }
 
     /**

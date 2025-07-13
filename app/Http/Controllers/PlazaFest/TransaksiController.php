@@ -12,6 +12,7 @@ class TransaksiController extends Controller
 
     public function makeTransaction(Request $request)
     {
+        $urlformRq = $request->urlformRq ?? null;
         $validated = $request->validate([
             'idsubfacility' => 'required|integer',
             'time_start' => 'required|array|min:1',
@@ -81,6 +82,7 @@ class TransaksiController extends Controller
                     'transaction_id' => $transactionId,
                     'payment_type' => $validated['detail']['payment_type'] ?? 'credit_card',
                     'customer_details' => $validated['detail']['customer_details'] ?? [],
+                    'cathcallback' => $urlformRq ? $urlformRq : null,
                 ];
 
                 // Add payment method specific data
