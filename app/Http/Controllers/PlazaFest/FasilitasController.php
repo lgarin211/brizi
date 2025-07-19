@@ -52,6 +52,10 @@ class FasilitasController extends Controller
                 }
                 if (isset($facility->var->additonaltime)) {
                     $facility->var->additonaltime = json_decode($facility->var->additonaltime, true);
+                    // cek jamnya lalu urutkan
+                    usort($facility->var->additonaltime, function ($a, $b) {
+                        return strtotime($a) - strtotime($b);
+                    });
                 }
             }
         }
