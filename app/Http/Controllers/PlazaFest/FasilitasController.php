@@ -27,6 +27,11 @@ class FasilitasController extends Controller
     public function getListFasilityById(Request $request, $id)
     {
         $facilities = DB::table('listfasilitas')->where('idfacility', $id)->get();
+        foreach ($facilities as $d=>$facility) {
+            $facility->var=DB::table('sub_facility')
+                ->where('id', $facility->idsubfacility)
+                ->first();
+        }
         return response()->json($facilities);
     }
 
