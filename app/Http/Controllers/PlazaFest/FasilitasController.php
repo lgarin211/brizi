@@ -29,7 +29,7 @@ class FasilitasController extends Controller
         $facilities = DB::table('listfasilitas')->where('idfacility', $id)->get();
         foreach ($facilities as $d=>$facility) {
             $facility->var=DB::table('sub_facility')
-                ->where('id', $facility->idsubfacility)
+                ->where('id', $facility->id)
                 ->first();
         }
         return response()->json($facilities);
