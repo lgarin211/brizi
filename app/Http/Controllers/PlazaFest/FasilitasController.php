@@ -27,10 +27,33 @@ class FasilitasController extends Controller
     public function getListFasilityById(Request $request, $id)
     {
         $facilities = DB::table('listfasilitas')->where('idfacility', $id)->get();
-        foreach ($facilities as $d=>$facility) {
-            $facility->var=DB::table('sub_facility')
+        foreach ($facilities as $d => $facility) {
+            $facility->var = DB::table('sub_facility')
                 ->where('id', $facility->id)
                 ->first();
+            if ($facility->var) {
+                // Parse JSON fields if present
+                if (isset($facility->var->banner)) {
+                    $facility->var->banner = json_decode($facility->var->banner, true);
+                    // Convert banner paths to asset URLs if needed
+                    if (is_array($facility->var->banner)) {
+                        foreach ($facility->var->banner as $k => $v) {
+                            if (is_string($v)) {
+                                $facility->var->banner[$k] = asset('storage/' . $v);
+                            }
+                        }
+                    }
+                }
+                if (isset($facility->var->additional)) {
+                    $facility->var->additional = json_decode($facility->var->additional, true);
+                }
+                if (isset($facility->var->additonalday)) {
+                    $facility->var->additonalday = json_decode($facility->var->additonalday, true);
+                }
+                if (isset($facility->var->additonaltime)) {
+                    $facility->var->additonaltime = json_decode($facility->var->additonaltime, true);
+                }
+            }
         }
         return response()->json($facilities);
     }
