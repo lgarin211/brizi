@@ -47,13 +47,28 @@ class WelcomeController extends Controller
             'fb' => setting('landing.fb'),
             'ig' => setting('landing.ig')
         ];
+
+        $datacomponent6 = [
+            setting('lantai.ug_map'),
+            setting('lantai.gf_map')
+        ];
+
+        foreach ($datacomponent6 as $key => $map) {
+            if ($map) {
+                $datacomponent6[$key] = url('/storage/' . $map);
+            }
+        }
+
+
+
         $response = [
             'component0' => $datacomponent0,
             'component1' => $datacomponent1,
             'component2' => $datacomponent2,
             'component3' => $datacomponent3,
             'component4' => $datacomponent4,
-            'component5' => $datacomponent5
+            'component5' => $datacomponent5,
+            'component6' => $datacomponent6
         ];
         return response()->json(['message' => 'Data berhasil diambil', 'data' => $response], 200);
     }
