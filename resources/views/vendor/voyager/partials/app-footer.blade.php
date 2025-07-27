@@ -1,6 +1,6 @@
 <footer class="app-footer">
     <div class="site-footer-right">
-        @if (rand(1,100) == 100)
+        {{-- @if (rand(1,100) == 100)
             <i class="voyager-rum-1"></i> {{ __('voyager::theme.footer_copyright2') }}
         @else
             {!! __('voyager::theme.footer_copyright') !!} <a href="http://thecontrolgroup.com" target="_blank">The Control Group</a>
@@ -8,6 +8,8 @@
         @php $version = Voyager::getVersion(); @endphp
         @if (!empty($version))
             - {{ $version }}
-        @endif
+        @endif --}}
+
+        System Build Power with <a href="https://www.progesio.my.id">Progesio</a>
     </div>
 </footer>
