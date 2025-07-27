@@ -1,11 +1,14 @@
 <?php
-
-// Contoh implementasi URL notifikasi terpisah untuk Midtrans
-
 /*
+=================================================================================
+DOKUMENTASI KONFIGURASI MIDTRANS NOTIFICATION URLS
+=================================================================================
+
+File ini adalah dokumentasi untuk konfigurasi URL notifikasi Midtrans.
+Ini BUKAN file yang akan dieksekusi, melainkan panduan implementasi.
+
 === ROUTES UNTUK URL NOTIFIKASI BERBEDA ===
 Tambahkan di routes/api.php jika ingin URL terpisah:
-*/
 
 // 1. URL Notifikasi Utama
 Route::post('/midtrans/notification', [MidtransController::class, 'notification'])
@@ -19,14 +22,10 @@ Route::post('/midtrans/notification-backup', [MidtransController::class, 'notifi
 Route::post('/midtrans/notification-linking', [MidtransController::class, 'notificationLinking'])
     ->middleware('midtrans.callback');
 
-/*
 === METHODS CONTROLLER TAMBAHAN ===
 Tambahkan di MidtransController.php jika diperlukan:
-*/
 
-/**
- * Backup notification handler
- */
+Backup notification handler:
 public function notificationBackup(Request $request)
 {
     // Log sebagai backup notification
@@ -40,9 +39,7 @@ public function notificationBackup(Request $request)
     return $this->notification($request);
 }
 
-/**
- * Account linking notification handler
- */
+Account linking notification handler:
 public function notificationLinking(Request $request)
 {
     try {
@@ -67,22 +64,51 @@ public function notificationLinking(Request $request)
     }
 }
 
-/*
 === URL UNTUK MIDTRANS DASHBOARD ===
 
 1. URL notifikasi pembayaran:
-   https://yourdomain.com/api/midtrans/notification
+   https://service.plazafestival-gmsb.co.id/api/midtrans/notification
 
 2. URL notifikasi pembayaran berulang:
-   https://yourdomain.com/api/midtrans/notification-backup
+   https://service.plazafestival-gmsb.co.id/api/midtrans/notification-backup
 
 3. URL notifikasi menghubungkan akun:
-   https://yourdomain.com/api/midtrans/notification-linking
+   https://service.plazafestival-gmsb.co.id/api/midtrans/notification-linking
 
-=== REKOMENDASI ===
+=== REKOMENDASI PENGGUNAAN ===
 
-Untuk kemudahan maintenance, gunakan URL yang sama untuk semua:
-https://yourdomain.com/api/midtrans/notification
+Untuk kemudahan maintenance, disarankan menggunakan URL yang sama untuk semua:
+https://service.plazafestival-gmsb.co.id/api/midtrans/notification
 
-Handler sudah cukup robust untuk menangani semua jenis notifikasi.
+Karena handler notification() sudah cukup robust untuk menangani semua jenis notifikasi.
+
+=== TESTING URL NOTIFICATION ===
+
+Gunakan cURL untuk testing:
+
+curl -X POST https://service.plazafestival-gmsb.co.id/api/midtrans/notification \
+  -H "Content-Type: application/json" \
+  -d '{
+    "transaction_time": "2024-01-01 12:00:00",
+    "transaction_status": "capture",
+    "transaction_id": "test-transaction-123",
+    "status_message": "midtrans payment notification",
+    "status_code": "200",
+    "signature_key": "test-signature",
+    "payment_type": "credit_card",
+    "order_id": "ORDER-123456",
+    "merchant_id": "your-merchant-id",
+    "gross_amount": "100000.00",
+    "fraud_status": "accept",
+    "currency": "IDR"
+  }'
+
+=== CATATAN PENTING ===
+
+1. Pastikan middleware 'midtrans.callback' sudah dikonfigurasi
+2. Verifikasi signature_key untuk keamanan
+3. Log semua notifikasi untuk debugging
+4. Handle semua status transaksi yang mungkin
+5. Backup data notifikasi untuk audit trail
+
 */
