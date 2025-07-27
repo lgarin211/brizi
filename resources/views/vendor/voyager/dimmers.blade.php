@@ -80,70 +80,73 @@
 
         <!-- Total Fasilitas -->
         <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-            <div class="card" style="width: 18rem;">
+            <div class="card h-100">
                 <div class="card-img-top hidden d-flex align-items-center justify-content-center" style="height: 120px; background: linear-gradient(135deg, #3498db, #2980b9);">
                     {{-- <i class="voyager-home text-white" style="font-size: 4em; opacity: 0.9;"></i> --}}
                 </div>
-                <div class="card-body text-center">
+                <div class="card-body text-center d-flex flex-column">
                     <h5 class="card-title text-wrap">Total Fasilitas</h5>
                     <h2 class="text-primary mb-3" style="font-size: 2.5em; font-weight: bold;">
                         {{ number_format($totalFasilitas) }}
                     </h2>
-                    <p class="card-text">Semua fasilitas yang tersedia di PlazaFest</p>
-                    <a href="{{ route('voyager.facility.index') }}" class="btn btn-primary">Lihat Detail</a>
+                    <p class="card-text flex-grow-1">Semua fasilitas yang tersedia</p>
+                    <a href="{{ route('voyager.facility.index') }}" class="btn btn-primary mt-auto">Lihat Detail</a>
                 </div>
             </div>
         </div>
 
         <!-- Total Transaksi Bulan Ini -->
         <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-            <div class="card" style="width: 18rem;">
+            <div class="card h-100">
                 <div class="card-img-top hidden d-flex align-items-center justify-content-center" style="height: 120px; background: linear-gradient(135deg, #27ae60, #229954);">
                     {{-- <i class="voyager-credit-cards text-white" style="font-size: 4em; opacity: 0.9;"></i> --}}
                 </div>
-                <div class="card-body text-center">
+                <div class="card-body text-center d-flex flex-column">
                     <h5 class="card-title text-wrap">Transaksi Bulan Ini</h5>
                     <h2 class="text-success mb-2" style="font-size: 2.5em; font-weight: bold;">
                         {{ number_format($totalTransaksiBulanIni) }}
                     </h2>
-                    <p class="card-text">
+                    <p class="card-text flex-grow-1">
                         Total nilai: <strong>Rp {{ number_format($totalNilaiBulanIni, 0, ',', '.') }}</strong>
                     </p>
-                    <a href="{{ route('voyager.transaction.index') }}" class="btn btn-success">Lihat Transaksi</a>
+                    <a href="{{ route('voyager.transaction.index') }}" class="btn btn-success mt-auto">Lihat Transaksi</a>
                 </div>
             </div>
         </div>
 
         <!-- Total User Terdaftar -->
         <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-            <div class="card" style="width: 18rem;">
+            <div class="card h-100">
                 <div class="card-img-top hidden d-flex align-items-center justify-content-center" style="height: 120px; background: linear-gradient(135deg, #e74c3c, #c0392b);">
                     {{-- <i class="voyager-group text-white" style="font-size: 4em; opacity: 0.9;"></i> --}}
                 </div>
-                <div class="card-body text-center">
+                <div class="card-body text-center d-flex flex-column">
                     <h5 class="card-title text-wrap">Total User Aktif</h5>
                     <h2 class="text-danger mb-3" style="font-size: 2.5em; font-weight: bold;">
                         {{ number_format($totalUsers) }}
                     </h2>
-                    <p class="card-text">User yang terdaftar dan aktif menggunakan aplikasi</p>
-                    <a href="{{ route('voyager.users.index') }}" class="btn btn-danger">Kelola User</a>
+                    <p class="card-text flex-grow-1">User yang terdaftar dan aktif menggunakan aplikasi</p>
+                    <div class="mt-auto">
+                        {{-- <a href="{{ route('voyager.users.index') }}" class="btn btn-danger">Kelola User</a> --}}
+                        <span class="text-muted">Data pengguna aktif</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- User Terdaftar Bulan Ini -->
         <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
-            <div class="card" style="width: 18rem;">
+            <div class="card h-100">
                 <div class="card-img-top hidden d-flex align-items-center justify-content-center" style="height: 120px; background: linear-gradient(135deg, #9b59b6, #8e44ad);">
                     {{-- <i class="voyager-person text-white" style="font-size: 4em; opacity: 0.9;"></i> --}}
                 </div>
-                <div class="card-body text-center">
+                <div class="card-body text-center d-flex flex-column">
                     <h5 class="card-title text-wrap">User Baru Bulan Ini</h5>
                     <h2 class="text-info mb-3" style="font-size: 2.5em; font-weight: bold;">
                         {{ number_format($usersBulanIni) }}
                     </h2>
-                    <p class="card-text">Registrasi baru pada {{ $bulanNama }}</p>
-                    <a href="{{ route('voyager.users.index') }}?filter=new" class="btn btn-info">Lihat User Baru</a>
+                    <p class="card-text flex-grow-1">Registrasi baru pada {{ $bulanNama }}</p>
+                    <a href="{{ route('voyager.users.index') }}?filter=new" class="btn btn-info mt-auto">Lihat User Baru</a>
                 </div>
             </div>
         </div>
