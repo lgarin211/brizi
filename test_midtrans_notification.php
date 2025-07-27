@@ -103,10 +103,10 @@ echo "\n=== TESTING BERBAGAI STATUS ===\n";
 foreach ($test_statuses as $test_status) {
     $status = $test_status['status'];
     $code = $test_status['code'];
-    
+
     $test_order_id = 'ORDER-' . strtoupper($status) . '-' . time();
     $test_signature = generateSignature($test_order_id, $code, $gross_amount, $server_key);
-    
+
     $test_data = [
         'transaction_time' => date('Y-m-d H:i:s'),
         'transaction_status' => $status,
@@ -121,9 +121,9 @@ foreach ($test_statuses as $test_status) {
         'fraud_status' => 'accept',
         'currency' => 'IDR'
     ];
-    
+
     echo "Testing status: " . $status . " (code: " . $code . ")... ";
-    
+
     $curl = curl_init();
     curl_setopt_array($curl, [
         CURLOPT_URL => $notification_url,
@@ -138,11 +138,11 @@ foreach ($test_statuses as $test_status) {
         CURLOPT_SSL_VERIFYPEER => false,
         CURLOPT_SSL_VERIFYHOST => false
     ]);
-    
+
     $response = curl_exec($curl);
     $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
     curl_close($curl);
-    
+
     if ($http_code == 200) {
         echo "✓ OK";
         // Decode response to show status
@@ -161,7 +161,7 @@ foreach ($test_statuses as $test_status) {
         }
         echo "\n";
     }
-    
+
     // Delay untuk menghindari rate limiting
     sleep(1);
 }
