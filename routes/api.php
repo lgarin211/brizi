@@ -10,9 +10,26 @@ use App\Http\Controllers\PlazaFest\MenuRestoController;
 use App\Http\Controllers\PlazaFest\SportVenueController;
 use App\Http\Controllers\PlazaFest\WelcomeController;
 use App\Http\Controllers\PlazaFest\DetailBookingController;
+use App\Http\Controllers\PlazaFest\AuthController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+// Authentication Routes
+Route::prefix('auth')->group(function () {
+    // Public routes (no authentication required)
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+
+    // Protected routes (authentication required)
+    Route::middleware('api.token.auth')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+        Route::get('/profile', [AuthController::class, 'profile']);
+        Route::put('/profile', [AuthController::class, 'updateProfile']);
+        Route::post('/change-password', [AuthController::class, 'changePassword']);
+        Route::post('/refresh-token', [AuthController::class, 'refreshToken']);
+    });
 });
 
 // PlazaFest Routes

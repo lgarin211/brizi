@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'voyager.firebase.trigger' => \App\Http\Middleware\VoyagerFirebaseTrigger::class,
         'midtrans.callback' => \App\Http\Middleware\MidtransCallbackMiddleware::class,
+        'api.token.auth' => \App\Http\Middleware\ApiTokenAuth::class,
     ];
 }

@@ -436,6 +436,79 @@ class MidtransController extends Controller
         ]);
     }
 
+     public function finish2(Request $request)
+    {
+        // Try to get order_id from different sources including raw body
+        $orderId = $this->extractOrderId($request);
+        // dd($request->all());
+        // dd($orderId);
+        // Build briziCallback URL based on transaction status
+        $nbis = $request->input('nbis', $request->nbis ?? null);
+        $baseCallback = $nbis ? rtrim($nbis, '/') . "/payment" : url("/payment");
+        switch ($request->transaction_status) {
+            case 'capture':
+            $briziCallback = $baseCallback . '/success?orderid=' . $orderId;
+            break;
+            case 'deny':
+            $briziCallback = $baseCallback . '/failed?orderid=' . $orderId;
+            break;
+            case 'expire':
+            $briziCallback = $baseCallback . '/expired?orderid=' . $orderId;
+            break;
+            case 'cancel':
+            $briziCallback = $baseCallback . '/cancelled?orderid=' . $orderId;
+            break;
+            case 'refund':
+            $briziCallback = $baseCallback . '/refunded?orderid=' . $orderId;
+            break;
+            case 'partial_refund':
+            $briziCallback = $baseCallback . '/partial_refunded?orderid=' . $orderId;
+            break;
+            default:
+            $briziCallback = $baseCallback . '/pending?orderid=' . $orderId;
+            break;
+        }
+
+        Log::info('Midtrans Finish Callback', [
+            'all_request_data' => $request->all(),
+            'query_params' => $request->query(),
+            'post_data' => $request->input(),
+            'raw_content' => $request->getContent(),
+            'content_type' => $request->header('Content-Type'),
+            'order_id_found' => $orderId
+        ]);
+
+        if (!$orderId) {
+            return response()->json([
+                'message' => 'Payment process completed but order ID not found',
+                'order_id' => null,
+                'status' => 'unknown',
+                'redirect_url' => url('/booking-status'),
+                'debug_info' => [
+                    'request_method' => $request->method(),
+                    'all_params' => $request->all(),
+                    'raw_content' => $request->getContent(),
+                    'content_type' => $request->header('Content-Type')
+                ]
+            ]);
+        }
+
+        $transaction = DB::table('transaction')->where('order_id', $orderId)->first();
+        DB::table('transaction')
+            ->where('order_id', $orderId)
+            ->update([
+                'status' => $request->transaction_status,
+                'updated_at' => now()
+            ]);
+        // dd($transaction, $briziCallback);
+        return redirect()->to($briziCallback)
+            ->with('message', 'Payment process completed')
+            ->with('order_id', $orderId)
+            ->with('status', $transaction ? $transaction->status : 'unknown')
+            ->with('transaction_found', $transaction ? true : false);
+    }
+
+
     /**
      * Midtrans finish callback (user returns from Midtrans)
      */
@@ -447,28 +520,28 @@ class MidtransController extends Controller
         // dd($orderId);
         // Build briziCallback URL based on transaction status
         $nbis = $request->input('nbis', $request->nbis ?? null);
-        $baseCallback = $nbis ? rtrim($nbis, '/') . "/payment/$orderId" : url("/payment/$orderId");
+        $baseCallback = $nbis ? rtrim($nbis, '/') . "/payment" : url("/payment");
         switch ($request->transaction_status) {
             case 'capture':
-            $briziCallback = $baseCallback . '/success';
+            $briziCallback = $baseCallback . '/success?orderid=' . $orderId;
             break;
             case 'deny':
-            $briziCallback = $baseCallback . '/failed';
+            $briziCallback = $baseCallback . '/failed?orderid=' . $orderId;
             break;
             case 'expire':
-            $briziCallback = $baseCallback . '/expired';
+            $briziCallback = $baseCallback . '/expired?orderid=' . $orderId;
             break;
             case 'cancel':
-            $briziCallback = $baseCallback . '/cancelled';
+            $briziCallback = $baseCallback . '/cancelled?orderid=' . $orderId;
             break;
             case 'refund':
-            $briziCallback = $baseCallback . '/refunded';
+            $briziCallback = $baseCallback . '/refunded?orderid=' . $orderId;
             break;
             case 'partial_refund':
-            $briziCallback = $baseCallback . '/partial_refunded';
+            $briziCallback = $baseCallback . '/partial_refunded?orderid=' . $orderId;
             break;
             default:
-            $briziCallback = $baseCallback . '/pending';
+            $briziCallback = $baseCallback . '/pending?orderid=' . $orderId;
             break;
         }
 
