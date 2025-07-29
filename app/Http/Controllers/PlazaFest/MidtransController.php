@@ -33,13 +33,13 @@ class MidtransController extends Controller
     public function getPaymentMethods()
     {
         $paymentMethods = [
-            'credit_card' => [
-                'type' => 'credit_card',
-                'name' => 'Credit Card',
-                'description' => 'Visa, MasterCard, JCB',
-                'enabled' => true,
-                'icon' => 'credit-card.png'
-            ],
+            // 'credit_card' => [
+            //     'type' => 'credit_card',
+            //     'name' => 'Credit Card',
+            //     'description' => 'Visa, MasterCard, JCB',
+            //     'enabled' => true,
+            //     'icon' => 'credit-card.png'
+            // ],
             'bank_transfer' => [
                 'type' => 'bank_transfer',
                 'name' => 'Bank Transfer',
@@ -68,24 +68,24 @@ class MidtransController extends Controller
                     'linkaja' => ['name' => 'LinkAja', 'code' => 'linkaja']
                 ]
             ],
-            'convenience_store' => [
-                'type' => 'convenience_store',
-                'name' => 'Convenience Store',
-                'description' => 'Bayar di toko terdekat',
-                'enabled' => true,
-                'icon' => 'convenience-store.png',
-                'stores' => [
-                    'indomaret' => ['name' => 'Indomaret', 'code' => 'cstore'],
-                    'alfamart' => ['name' => 'Alfamart', 'code' => 'alfamart']
-                ]
-            ],
-            'qris' => [
-                'type' => 'qris',
-                'name' => 'QRIS',
-                'description' => 'Scan QR Code untuk bayar',
-                'enabled' => true,
-                'icon' => 'qris.png'
-            ]
+            // 'convenience_store' => [
+            //     'type' => 'convenience_store',
+            //     'name' => 'Convenience Store',
+            //     'description' => 'Bayar di toko terdekat',
+            //     'enabled' => true,
+            //     'icon' => 'convenience-store.png',
+            //     'stores' => [
+            //         'indomaret' => ['name' => 'Indomaret', 'code' => 'cstore'],
+            //         'alfamart' => ['name' => 'Alfamart', 'code' => 'alfamart']
+            //     ]
+            // ],
+            // 'qris' => [
+            //     'type' => 'qris',
+            //     'name' => 'QRIS',
+            //     'description' => 'Scan QR Code untuk bayar',
+            //     'enabled' => true,
+            //     'icon' => 'qris.png'
+            // ]
         ];
 
         return response()->json([
@@ -99,6 +99,8 @@ class MidtransController extends Controller
      */
     public function createPayment(Request $request)
     {
+        // return response()->json(['error' => 'This method is not implemented yet', 'request' => $request->all()]);
+
         $validated = $request->validate([
             'transaction_id' => 'required|integer',
             'payment_type' => 'required|string',
@@ -182,8 +184,8 @@ class MidtransController extends Controller
                 ],
                 'expiry' => [
                     'start_time' => date('Y-m-d H:i:s O'),
-                    'unit' => 'hour',
-                    'duration' => 24
+                    'unit' => 'minute',
+                    'duration' => 5
                 ],
                 'custom_field1' => 'Plaza Facility Booking',
                 'custom_field2' => 'Transaction ID: ' . $transaction->id,
@@ -232,7 +234,6 @@ class MidtransController extends Controller
                 'payment_type' => $validated['payment_type'] ?? null,
                 'trace' => $e->getTraceAsString()
             ]);
-            dd($e);
             return response()->json(['error' => 'Failed to create payment', 'message' => $e->getMessage()], 500);
         }
     }

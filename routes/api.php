@@ -113,6 +113,34 @@ Get transaction details by ID
 */
 Route::get('/getTransaction', [TransaksiController::class, 'getTransaction']);
 
+/*
+Sample Request: GET /api/getUserTransactions
+Headers: Authorization: Bearer [token] (if using authentication)
+Query Parameters: user_id=123
+
+Get all successful transactions for a specific user based on PolinID
+
+Response: {
+    "success": true,
+    "message": "User transactions retrieved successfully",
+    "data": [
+        {
+            "t_id": 1,
+            "PolinID": 123,
+            "price": "100000",
+            "status": "success",
+            "barcode": "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='...'",
+            "created_at": "2025-07-30T10:30:00",
+            ...
+        }
+    ],
+    "total_transactions": 5,
+    "total_amount": "500000",
+    "user_id": 123
+}
+*/
+Route::get('/getUserTransactions', [TransaksiController::class, 'getUserTransactions']);
+
 // Article Routes
 
 /*

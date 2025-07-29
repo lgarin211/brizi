@@ -12,6 +12,9 @@ class TransaksiController extends Controller
 
     public function makeTransaction(Request $request)
     {
+
+        // return response()->json(['error' => 'This method is not implemented yet', 'request' => $request->all()]);
+
         $urlformRq = $request->urlformRq ?? null;
         $validated = $request->validate([
             'idsubfacility' => 'required|integer',
@@ -35,7 +38,7 @@ class TransaksiController extends Controller
         ]);
 
         $now = now();
-
+        // return response()->json(['user_id' => $request->user_id]);
         // Prepare basic transaction data
         $insertData = [
             'idsubfacility'    => $validated['idsubfacility'],
@@ -49,6 +52,7 @@ class TransaksiController extends Controller
             'created_at'       => $now,
             'updated_at'       => $now,
             'deleted_at'       => null,
+            'user_id'          => $request->user_id
         ];
 
         // Add payment details if provided
@@ -71,10 +75,17 @@ class TransaksiController extends Controller
         $responseData = [
             'success' => true,
             'transaction_id' => $transactionId,
-            'message' => 'Transaction created successfully'
+            'message' => 'Transaction created successfully',
+            'created_at' => $now->toDateTimeString(),
+            'updated_at' => $now->toDateTimeString(),
+            'next_step' => 'Please proceed with payment',
+            'inserdata' => $insertData,
         ];
 
         // Call to Midtrans payment creation if transaction point is not cash
+
+        // return response()->json($responseData);
+
         if (isset($validated['detail']) && $validated['transactionpoin'] !== 'cash') {
             try {
                 // Prepare Midtrans payment data
@@ -98,6 +109,7 @@ class TransaksiController extends Controller
 
                 // Create new request instance for Midtrans
                 $midtransRequest = new Request($midtransData);
+
                 $midtransController = new \App\Http\Controllers\PlazaFest\MidtransController();
                 $midtransResponse = $midtransController->createPayment($midtransRequest);
 
@@ -138,7 +150,7 @@ class TransaksiController extends Controller
     {
         $id = $request->id;
         $transactions = DB::table('listsuccesstransction')
-            ->where('t_id',$id)
+            ->where('order_id',$id)
             ->first();
         if (!$transactions) {
             return response()->json(['error' => 'Transaction not found'], 404);
@@ -149,5 +161,64 @@ class TransaksiController extends Controller
             $transactions->barcode =  "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='".$convert."'";
         }
         return response()->json($transactions);
+    }
+
+    public function getUserTransactions(Request $request)
+    {
+        try {
+            // Validasi user_id
+            if (!$request->user_id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User ID is required'
+                ], 400);
+            }
+
+            // Ambil semua transaksi success berdasarkan PolinID
+            $transactions = DB::table('listsuccesstransction')
+                ->where('PolinID', $request->user_id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            // Jika tidak ada transaksi
+            if ($transactions->isEmpty()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'No transactions found for this user',
+                    'data' => [],
+                    'total_transactions' => 0
+                ]);
+            }
+
+            // Generate barcode untuk setiap transaksi yang belum memiliki barcode
+            $transactions = $transactions->map(function($transaction) {
+                if ($transaction->barcode == null) {
+                    $convert = json_encode($transaction);
+                    $convert = Hash::make($convert);
+                    $transaction->barcode = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data='".$convert."'";
+                }
+                return $transaction;
+            });
+
+            // Hitung statistik
+            $totalTransactions = $transactions->count();
+            $totalAmount = $transactions->sum('price');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'User transactions retrieved successfully',
+                'data' => $transactions,
+                'total_transactions' => $totalTransactions,
+                'total_amount' => $totalAmount,
+                'user_id' => $request->user_id
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error retrieving user transactions',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
