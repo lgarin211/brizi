@@ -202,7 +202,7 @@ Note: Use snap_token with Midtrans Snap.js or redirect user to snap_redirect_url
 Route::post('/midtrans/create-payment', [MidtransController::class, 'createPayment']);
 
 /*
-Sample Request: POST /api/midtrans/notification (Webhook from Midtrans Sandbox)
+Sample Request: GET/POST /api/midtrans/notification (Webhook from Midtrans Sandbox)
 Headers: Content-Type: application/json
 Body: {
     "order_id": "PLAZA-123-1673456789",
@@ -218,8 +218,9 @@ Body: {
 
 Note: This is automatically sent by Midtrans when payment status changes
 Set notification URL in Midtrans Dashboard to: https://yourdomain.com/api/midtrans/notification
+Accepts both GET and POST methods for maximum compatibility
 */
-Route::post('/midtrans/notification', [MidtransController::class, 'notification'])->middleware('midtrans.callback');
+Route::match(['get', 'post'], '/midtrans/notification', [MidtransController::class, 'notification'])->middleware('midtrans.callback');
 
 /*
 Sample Request: POST /api/midtrans/success
