@@ -175,7 +175,7 @@ class TransaksiController extends Controller
             }
 
             // Ambil semua transaksi success berdasarkan PolinID
-            $transactions = DB::table('listsuccesstransction')
+            $transactions = DB::table('listtransction')
                 ->where('PolinID', $request->user_id)
                 ->orderBy('created_at', 'desc')
                 ->get();
